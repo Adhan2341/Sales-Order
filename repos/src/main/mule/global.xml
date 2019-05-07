@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit"
+	xmlns:email="http://www.mulesoft.org/schema/mule/email"
+	xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns:file="http://www.mulesoft.org/schema/mule/file"
+	xmlns:vm="http://www.mulesoft.org/schema/mule/vm"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd 
+http://www.mulesoft.org/schema/mule/email http://www.mulesoft.org/schema/mule/email/current/mule-email.xsd 
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd 
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd 
+http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/current/mule-vm.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<configuration-properties doc:name="Configuration properties" doc:id="8e07dcb2-88b0-40b7-9840-77d235d3280d" file="config.yaml" />
+	<vm:config name="VM_Config" doc:name="VM Config" doc:id="0436029c-8a01-4897-8a4f-344b31332344">
+		<vm:queues >
+			<vm:queue queueName="vm_1" />
+		</vm:queues>
+	</vm:config>
+	<http:request-config name="HTTP_Request_configuration_ship" doc:name="HTTP Request configuration" doc:id="34008aa8-e83e-4ad0-b7d0-8d76e06ecced" basePath="${ship1.path}" >
+		<http:request-connection protocol="HTTPS" host="${ship1.host}" />
+	</http:request-config>
+	<http:request-config name="HTTP_Request_configuration_shedul" doc:name="HTTP Request configuration" doc:id="add23ee4-f1a3-49fe-9723-e3f03f49ff6d" basePath="${shedul1.path}" >
+		<http:request-connection host="${shedul1.host}" protocol="HTTPS"/>
+	</http:request-config>
+	<apikit:config name="sales-order-processing-config" raml="sales-order-processing.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+	 <http:listener-config name="sales-order-processing-httpListenerConfig">
+        <http:listener-connection host="0.0.0.0" port="${http.port}" />
+    </http:listener-config>
+    <db:config name="Database_mysql" doc:name="Database Config" doc:id="a43fb8a4-2fa2-4dbd-a525-adae526cd160" >
+		<db:my-sql-connection host="${db.host}" port="${db.port}" user="${db.user}" password="${db.pass}" database="${db.database}"/>
+	</db:config>
+	<email:smtp-config name="Email_SMTP" doc:name="Email SMTP" doc:id="b28bd665-1909-47c1-ac8b-c877fdc6ee78" >
+		<email:smtp-connection host="localhost" />
+	</email:smtp-config>
+	<file:config name="File_Config" doc:name="File Config" doc:id="87787790-3bdc-44e0-a9e7-011daecd1c5d" >
+		<file:connection workingDir="${file.dir}" />
+	</file:config>
+</mule>

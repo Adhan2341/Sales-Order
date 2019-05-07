@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:os="http://www.mulesoft.org/schema/mule/os"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:vm="http://www.mulesoft.org/schema/mule/vm"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/current/mule-vm.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd">
+	
+	<flow name="shipping" doc:id="5f208547-6d9f-4e54-a5df-d8a5b1973161" >
+		<set-variable value="#[payload]" doc:name="Set Variable" doc:id="1a11da86-0451-435a-b63c-858a7d0d9f89" variableName="payloado"/>
+		<vm:publish queueName="vm_1" doc:name="Publish" doc:id="da123a91-eb9d-44ba-919c-399759c3fae3" config-ref="VM_Config">
+			<vm:content ><![CDATA[#[vars.payloado]]]></vm:content>
+		</vm:publish>
+		<os:store doc:name="Store" doc:id="00d91cef-9f1d-415e-b97f-8abbd64e3f27" key="COMPLETE "/>
+		<!--  <logger level="INFO" doc:name="Logger" doc:id="6207370c-8582-4300-8666-7a79fb8c880d" />
+		<vm:publish queueName="" doc:name="Publish" doc:id="aa8f795c-f50b-4525-a2fd-05d3f86ae581" />
+		<logger level="INFO" doc:name="Logger" doc:id="9b96fde1-b23f-4263-8951-6abd52e20647" />
+		<set-payload value="#[payload]" doc:name="Set Payload" doc:id="2731877c-d522-4a14-991c-10bcb5af3523" />-->
+	</flow>
+	<flow name="sales_oderFlow" doc:id="b1c57b63-e34c-445f-b631-b2ab8ba784d4" >
+		<vm:listener queueName="vm_1" doc:name="Listener" doc:id="ea438fcb-e9b0-4770-ae6b-823daf405fcc" config-ref="VM_Config"/>
+		<logger level="INFO" doc:name="Logger" doc:id="7dc9ddcd-0da7-4fa4-ab1a-edd4371fc033" message="#[payload]"/>
+		<set-payload value="#[payload]" doc:name="Set Payload" doc:id="d66a6690-9468-4a59-8d6d-d6ae2d58176a" />
+		<set-variable value="#[payload]" doc:name="Set Variable" doc:id="581c1162-7541-436c-b9f3-f5d90b68a279" variableName="original"/>
+		<logger level="INFO" doc:name="Logger" doc:id="1b6bffa0-27af-4c32-a180-bc5da104cf25" message="#[payload]"/>
+		<scatter-gather doc:name="Scatter-Gather" doc:id="ba97d4b3-2ef5-4057-b0bd-9345732b7ad8" >
+			<route >
+				<flow-ref doc:name="ship" doc:id="edfec79a-3daa-4eea-afab-7ad57a68043c" name="ship" />
+			</route>
+			<route >
+				<flow-ref doc:name="shedul" doc:id="edfec79a-3daa-4eea-afab-7ad57a68043c" name="shedul"/>
+			</route>
+		</scatter-gather>
+		<os:store doc:name="Store" doc:id="92cbc587-388c-4522-9e6c-7f00b19f8f22" key="PROCESSED "/>
+		<logger level="INFO" doc:name="Logger" doc:id="8861919d-0596-42c1-a7e4-86598c09e156" message="#[payload]"/>
+		<set-payload value="#[vars.original]" doc:name="Set Payload" doc:id="2e7611a5-2d8a-458d-b777-233a51ea4430" />
+		<flow-ref doc:name="Flow Reference" doc:id="6d4c2daf-e5fa-408e-a2f8-3e36899f8e7e" name="procesos"/>
+	</flow>
+	<sub-flow name="ship" doc:id="2052a55c-790b-4136-86f0-4f4f9eb75fd6" >
+		<logger level="INFO" doc:name="Logger" doc:id="09036150-e51a-479b-bae2-0d43eb37a336" message="#[payload]"/>
+		<ee:transform doc:name="Transform Message" doc:id="ffdb8e94-d8d3-4b46-8e4e-a2f4c0eaa511" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	customerId: payload.customerId,
+	customerName: payload.customerName,
+	salesOrderNumber: payload.salesOrderNumber,
+	items: payload.items filter($."type" == "item")map ( item , indexOfItem ) -> {
+		price: item.price,
+		quantity: item.quantity,
+		"type": item."type"
+	}
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<set-variable value="#[payload]" doc:name="Set Variable" doc:id="4b294aab-a381-4858-8543-63210a98b96d" variableName="ship" />
+		<logger level="INFO" doc:name="Logger" doc:id="d7f64f13-e3ac-4e8c-8cc5-d53a40138c27" message="#[payload]"/>
+		<http:request method="POST" doc:name="Request" doc:id="780e8b3b-e359-4c9d-a96f-8ec1b3120306" path="/order" config-ref="HTTP_Request_configuration_ship"/>
+		<set-payload value="#[vars.ship]" doc:name="Set Payload" doc:id="d678d9ab-df54-41b8-802e-7bc9e27bb696" />
+		<os:store doc:name="Store" doc:id="00eb95a4-6a37-49e5-8dc5-e91731883391" key="SCHEDULED "/>
+	</sub-flow>
+	<sub-flow name="shedul" doc:id="af9d645a-1147-4074-9ba9-3c6f2e98ad1a" >
+		<logger level="INFO" doc:name="Logger" doc:id="1e2616e7-7d2c-467d-b08b-95afc09763f5" message="#[payload]"/>
+		<ee:transform doc:name="Transform Message" doc:id="80aa30bd-87a0-4707-8225-6a6a9c94a129" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	customerId: payload.customerId,
+	customerName: payload.customerName,
+	salesOrderNumber: payload.salesOrderNumber,
+	items: payload.items filter($."type" == "service")map ( item , indexOfItem ) -> {
+		price: item.price,
+		quantity: item.quantity,
+		"type": item."type"
+	}
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<set-variable value="#[payload]" doc:name="Set Variable" doc:id="df992e25-5f38-4f06-910a-b44b20467405" variableName="shedul" />
+		<logger level="INFO" doc:name="Logger" doc:id="3ab6a0d5-a941-433d-a273-abcf8a1021a3" message="#[payload]"/>
+		<http:request method="POST" doc:name="Request" doc:id="8b50469e-217b-4994-ba7a-3eb76c0fcf55" path="/order" config-ref="HTTP_Request_configuration_shedul"/>
+		<set-payload value="#[vars.shedul]" doc:name="Set Payload" doc:id="78d56fd4-9d11-4596-a212-ed83d821f4cb" />
+		<os:store doc:name="Store" doc:id="bcfe6f8e-687c-42c4-8563-2a9ee86e588d" key="SHIPPED "/>
+	</sub-flow>
+	<sub-flow name="procesos" doc:id="7fe930b9-a800-49ff-bd6c-4b8479f4ff0e" >
+		<logger level="INFO" doc:name="Logger" doc:id="11bc11a3-6ed9-4e6a-9e6a-ae55a03daf65" message="#[payload]"/>
+		<ee:transform doc:name="Transform Message" doc:id="4d3f43a3-e6bb-4218-9410-764a3c6e8c48" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	customerId: payload.customerId,
+	customerName: payload.customerName,
+	salesOrderNumber: payload.salesOrderNumber,
+	items: payload.items map ( item , indexOfItem ) -> {
+		Description: item.itemDescription,
+		price: item.price,
+		quantity: item.quantity,
+		resulted: item.price * item.quantity
+	},
+}]]></ee:set-payload>
+			</ee:message>
+			<ee:variables />
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="6b65bc6b-c1b5-473b-94c2-a66c94358dd0" message="#[payload]"/>
+		<os:store doc:name="Store" doc:id="302ecdb6-e41e-4a20-9fc6-588e2839a2c0" key="PROCESSED "/>
+	</sub-flow>
+
+	</mule>

@@ -1,0 +1,14 @@
+{
+  "customerId": 2,
+  "customerName": "????",
+  "items": [
+    {
+      "itemDescription": "????",
+      "itemNumber": 2,
+      "price": 2,
+      "quantity": 2,
+      "type": "????"
+    }
+  ],
+  "salesOrderNumber": 2
+}

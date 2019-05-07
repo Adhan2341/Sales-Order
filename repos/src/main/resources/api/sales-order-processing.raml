@@ -1,0 +1,34 @@
+#%RAML 1.0
+version: v1
+baseUri: https://anypoint.mulesoft.com/mocking/api/v1/links/45765918-935f-4fe3-b688-b95a5c6b9ece/ # 
+title: Sales order processing
+
+types:
+  Order: !include dataType/order.raml
+/JSON:
+  put:
+    description: Recibe informacion en formato json.
+    body:
+      application/json:
+        type: Order
+        examples: !include examples/exampleJSON.raml
+    responses:
+      201:
+        body:
+          application/json:
+            example: {"message": "Info enviada"}
+           
+              
+              
+/csv:
+  put:
+      description: Recibe informacion en formato csv.
+      body:
+        multipart/form-data:
+          type: file
+      responses:
+        201:
+          body:
+            application/json:
+              example: {"message": "Info enviada"}
+              

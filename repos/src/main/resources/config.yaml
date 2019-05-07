@@ -1,0 +1,32 @@
+http:
+  port: "8081" 
+  
+ship:
+  path: "/mocks/32f2e6af-f83d-42eb-a832-f2eb0179e1f1"
+  protocol: "HTTPS"
+  host: "mocksvc.mulesoft.com"
+  
+shedul:
+  path: "/mocks/3f7ddde1-e2d5-446d-8c38-d1ddc9ea92e3"
+  protocol: "HTTPS"
+  host: "mocksvc.mulesoft.com"
+
+ship1:
+  path: "/mocking/api/v1/links/1f4bb791-7189-455d-840f-2b5ab2644490"
+  protocol: "HTTPS"
+  host: "anypoint.mulesoft.com"
+  
+shedul1:
+  path: "mocking/api/v1/links/a2826fa9-03e7-44fe-b89a-9721624ef1da"
+  protocol: "HTTPS"
+  host: "anypoint.mulesoft.com"
+  
+db:
+  port: "3306"
+  user: "root"
+  pass: "lyndis11"
+  host: "localhost"
+  database: "sales_order"
+
+file: 
+  dir: "/Users/Singular/Desktop/mule soft/resultados_shipping"  

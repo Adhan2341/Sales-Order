@@ -1,0 +1,174 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<types:mule xmlns:types="http://www.mulesoft.org/schema/mule/types">
+  <types:catalog>
+    <types:type name="datosCSV" format="csv">
+      <types:shape format="weave" example="examples/prueba-1.csv"><![CDATA[%dw 2.0
+type datosCSV = Array<{|
+  customerId: Number, 
+  customerName: String, 
+  salesOrderNumber: Number, 
+  itemNumber: Number, 
+  quantity: String, 
+  "type": String, 
+  price: Number, 
+  itemDescription: String
+|}> {"MetadataFormat": "csv"}
+
+]]></types:shape>
+      <types:properties>
+        <types:property name="headerLineNumber" value="0"/>
+        <types:property name="header" value="true"/>
+        <types:property name="isQuotedString" value="false"/>
+      </types:properties>
+    </types:type>
+    <types:type name="datosJSON" format="json">
+      <types:shape format="weave" example="examples/jsontra.txt"><![CDATA[%dw 2.0
+type datosJSON = {|
+  customerId: Number {"typeId": "int"}, 
+  customerName: String, 
+  items: Array<{|
+    itemDescription: String, 
+    itemNumber: Number {"typeId": "int"}, 
+    price: Number {"typeId": "int"}, 
+    quantity: Number {"typeId": "int"}, 
+    "type": String
+  |}>, 
+  salesOrderNumber: Number {"typeId": "int"}
+|} {"MetadataFormat": "json",
+"example": "{\"customerId\":1,\"customerName\":\"Adan Rosales\",\"items\":[{\"itemDescription\":\"it\u00B4s a doll\",\"itemNumber\":15215,\"price\":12,\"quantity\":3,\"type\":\"item\"},{\"itemDescription\":\"Internet\",\"itemNumber\":221,\"price\":133,\"quantity\":2,\"type\":\"service\"}],\"salesOrderNumber\":1000}"}
+
+]]></types:shape>
+    </types:type>
+    <types:type name="Json_to_json" format="json">
+      <types:shape format="weave" example="examples/jsontojson.json"><![CDATA[%dw 2.0
+type Json_to_json = Array<{|
+  customerId: Number {"typeId": "int"}, 
+  customerName: String, 
+  salesOrderNumber: Number {"typeId": "int"}, 
+  itemNumber: Number {"typeId": "int"}, 
+  quantity: Number {"typeId": "int"}, 
+  "type": String, 
+  price: Number {"typeId": "int"}, 
+  itemDescription: String
+|}> {"MetadataFormat": "json",
+"example": "[{\"customerId\":2,\"customerName\":\"Lyndis\",\"salesOrderNumber\":21331,\"itemNumber\":15234,\"quantity\":3,\"type\":\"item\",\"price\":23,\"itemDescription\":\"zolar\"},{\"customerId\":2,\"customerName\":\"Lyndis\",\"salesOrderNumber\":21331,\"itemNumber\":234,\"quantity\":1,\"type\":\"service\",\"price\":12,\"itemDescription\":\"water\"}]"}
+
+]]></types:shape>
+    </types:type>
+    <types:type name="csv" format="json">
+      <types:shape format="weave" example="examples/csv.txt"><![CDATA[%dw 2.0
+
+type csv = {|
+  customerName: String, 
+  iditems: Number {"typeId": "int"}, 
+  itemDescription: String, 
+  salesOrderNumber: String
+|} {"example": "{\"customerName\":\"Lyndis\",\"iditems\":40,\"itemDescription\":\"water\",\"salesOrderNumber\":\"21331\"}"}
+
+]]></types:shape>
+    </types:type>
+  </types:catalog>
+  <types:enrichment select="#3026c267-0781-4d7c-a24c-6201539a62df">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="datosCSV"/>
+        </types:message>
+      </types:input-event>
+      <types:output-event>
+        <types:message>
+          <types:payload type="Json_to_json"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#10c870d5-b7f3-4413-8cf6-841c16a57c21"/>
+  <types:enrichment select="#72440235-d7e9-4931-a6d5-029b278589a3">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="Json_to_json"/>
+        </types:message>
+      </types:input-event>
+      <types:output-event>
+        <types:message>
+          <types:payload type="datosJSON"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#87d88a8e-8fd1-437c-bdef-02483ce1a269">
+    <types:processor-declaration>
+      <types:output-event>
+        <types:message>
+          <types:payload type="datosCSV"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#80aa30bd-87a0-4707-8225-6a6a9c94a129">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="datosJSON"/>
+        </types:message>
+      </types:input-event>
+      <types:output-event>
+        <types:message>
+          <types:payload type="datosJSON"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#ffdb8e94-d8d3-4b46-8e4e-a2f4c0eaa511">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="datosJSON"/>
+        </types:message>
+      </types:input-event>
+      <types:output-event>
+        <types:message>
+          <types:payload type="datosJSON"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#4d3f43a3-e6bb-4218-9410-764a3c6e8c48">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="datosJSON"/>
+        </types:message>
+      </types:input-event>
+      <types:output-event>
+        <types:message>
+          <types:payload type="datosJSON"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#122b50f2-11b7-42ba-a3be-d73d675afe8b">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:attributes type="datosJSON"/>
+        </types:message>
+      </types:input-event>
+      <types:output-event>
+        <types:message>
+          <types:payload type="datosJSON"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#8524643e-fb53-4d33-868b-24db9407eac3">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="csv"/>
+        </types:message>
+      </types:input-event>
+    </types:processor-declaration>
+  </types:enrichment>
+</types:mule>

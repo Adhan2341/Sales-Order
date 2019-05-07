@@ -1,0 +1,21 @@
+{
+  "customerId": 1,
+  "customerName": "Adan Rosales",
+  "items": [
+    {
+      "itemDescription": "it´s a doll",
+      "itemNumber": 15215,
+      "price": 12,
+      "quantity": 3,
+      "type": "item"
+    },
+    {
+      "itemDescription": "Internet",
+      "itemNumber": 221,
+      "price": 133,
+      "quantity": 2,
+      "type": "service"
+    }
+  ],
+  "salesOrderNumber": 1000
+}

@@ -1,0 +1,27 @@
+{
+  "sampleData": {
+    "a3dcecee-1c6d-4251-9974-de4499a16caa": {
+      "payload": "sample_data/list_unknown.csv"
+    },
+    "86ca29ee-5a2c-4401-9617-b55ee6ce0c39": {
+      "payload": "sample_data/object.dwl"
+    },
+    "ac21b559-0855-4206-93d9-3edf854213b1": {},
+    "4c628d05-92e3-4a4d-9139-bdf85e7b9f04": {
+      "payload": "sample_data/list_unknown_2.csv"
+    },
+    "bb6b5ce3-05e4-4f8a-b133-df349043c73e": {
+      "payload": "sample_data/list_unknown_3.csv"
+    },
+    "77a9f82d-1d14-4a4b-92e1-c962758f7230": {
+      "payload": "sample_data/list_unknown_4.csv"
+    },
+    "3026c267-0781-4d7c-a24c-6201539a62df": {
+      "payload": "sample_data/list_unknown_5.csv"
+    },
+    "10c870d5-b7f3-4413-8cf6-841c16a57c21": {},
+    "72440235-d7e9-4931-a6d5-029b278589a3": {},
+    "71508647-6752-4cbe-9903-c397933fe39a": {},
+    "4d3f43a3-e6bb-4218-9410-764a3c6e8c48": {}
+  }
+}

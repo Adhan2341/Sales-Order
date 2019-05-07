@@ -1,0 +1,22 @@
+ [
+    {
+      "customerId": 2,
+      "customerName": "Lyndis",
+      "salesOrderNumber": 21331,
+      "itemNumber": 15234,
+      "quantity": 3,
+      "type": "item",
+      "price": 23,
+      "itemDescription": "zolar"
+    },
+    {
+      "customerId": 2,
+      "customerName": "Lyndis",
+      "salesOrderNumber": 21331,
+      "itemNumber": 234,
+      "quantity": 1,
+      "type": "service",
+      "price": 12,
+      "itemDescription": "water"
+    }
+	]
