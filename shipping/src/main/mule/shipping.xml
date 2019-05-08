@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns:sockets="http://www.mulesoft.org/schema/mule/sockets"
+	xmlns:smtp="http://www.mulesoft.org/schema/mule/smtp" xmlns:email="http://www.mulesoft.org/schema/mule/email" xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd 
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
+http://www.mulesoft.org/schema/mule/email http://www.mulesoft.org/schema/mule/email/current/mule-email.xsd
+http://www.mulesoft.org/schema/mule/sockets http://www.mulesoft.org/schema/mule/sockets/current/mule-sockets.xsd">
+    <http:listener-config name="shipping-httpListenerConfig">
+        <http:listener-connection host="0.0.0.0" port="8081" />
+    </http:listener-config>
+    <apikit:config name="shipping-config" raml="shipping.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+	<flow name="shipping-main">
+        <http:listener config-ref="shipping-httpListenerConfig" path="/api/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body><![CDATA[#[payload]]]></http:body>
+            </http:error-response>
+        </http:listener>
+        <apikit:router config-ref="shipping-config" />
+        <error-handler>
+            <on-error-propagate type="APIKIT:BAD_REQUEST">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Bad request"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">400</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_FOUND">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Resource not found"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">404</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:METHOD_NOT_ALLOWED">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Method not allowed"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">405</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_ACCEPTABLE">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Not acceptable"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">406</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:UNSUPPORTED_MEDIA_TYPE">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Unsupported media type"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">415</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_IMPLEMENTED" enableNotifications="true" logException="true">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Not Implemented"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">501</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+        </error-handler>
+    </flow>
+    <flow name="shipping-console">
+        <http:listener config-ref="shipping-httpListenerConfig" path="/console/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body>#[payload]</http:body>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:console config-ref="shipping-config" />
+        <error-handler>
+            <on-error-propagate type="APIKIT:NOT_FOUND">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/email http://www.mulesoft.org/schema/mule/email/current/mule-email.xsd 
+http://www.mulesoft.org/schema/mule/smtp http://www.mulesoft.org/schema/mule/smtp/current/mule-smtp.xsd 
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Resource not found"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">404</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+        </error-handler>
+    </flow>
+    <flow name="post:\order:application\json:shipping-config">
+        <logger level="INFO" message="post:\order:application\json:shipping-config" />
+		<set-variable value="#[payload]" doc:name="Set Variable" doc:id="70b590c3-a8ce-423b-9e1e-96775210e765" variableName="payloadOri"/>
+		<ee:transform doc:name="Transform Message" doc:id="122b50f2-11b7-42ba-a3be-d73d675afe8b" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+{
+	items: payload.items map ( item , indexOfItem ) -> {
+		itemDescription: item.itemDescription,
+		itemNumber: item.itemNumber,
+		price: item.price,
+		quantity: item.quantity,
+		"type": item."type"
+	}
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="320bc545-0779-455a-b674-739d9cd1f2d3" message="#[payload]"/>
+		<foreach doc:name="For Each" doc:id="29dba2e8-f3c2-40e5-90fe-93464467dfe6" collection="#[payload.items]">
+			<db:insert doc:name="Insert" doc:id="26be1d65-2f9a-463e-8da0-6664d1441a32" config-ref="Database_mysql">
+			<db:sql>insert into items(itemDescription,itemNumber,price,quantity,type)
+values(:itemDescription,:itemNumber,:price,:quantity,:type)</db:sql>
+			<db:input-parameters><![CDATA[#[{
+	"itemDescription": payload.itemDescription,
+	"itemNumber": payload.itemNumber,
+	"price": payload.price,
+	"quantity": payload.quantity,
+	"type": payload."type"
+}]]]></db:input-parameters>
+		</db:insert>
+		</foreach>
+		<set-payload value="#[vars.payloadOri]" doc:name="Set Payload" doc:id="bbe0fe9a-a6f6-4dcb-aba1-253d499933d9" />
+		<ee:transform doc:name="Transform Message" doc:id="23a1315a-f2fc-44db-b36a-bb7cb150ada6" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"customerName": payload.customerName,
+	"salesOrderNumber": payload.salesOrderNumber
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<db:insert doc:name="Insert" doc:id="dbfd76d8-7915-4f51-b794-f0a669e9733e" config-ref="Database_mysql">
+			<db:sql>insert into costumers(customerName,salesOrderNumber)
+values(:customerName,:salesOrderNumber)</db:sql>
+			<db:input-parameters><![CDATA[#[{"customerName": payload.customerName,
+"salesOrderNumber": payload.salesOrderNumber
+}]]]></db:input-parameters>
+		</db:insert>
+		<flow-ref doc:name="DB" doc:id="8452802b-2f8a-42a2-bf1e-1e7dfe1ead28" name="DB"/> 
+    </flow>
+	<flow name="DB" doc:id="e494d5e1-5f8a-4bbe-997f-030565d8424b">
+		<logger level="INFO" doc:name="Logger" doc:id="d06bb170-61f5-4eb7-9680-751c845660f4" />
+		<db:select doc:name="Select" doc:id="884baf46-f72d-4b77-a017-d3a02e434c46" config-ref="Database_mysql">
+			<db:sql>select * from costumers, items
+</db:sql>
+		</db:select>
+		<ee:transform doc:name="Transform Message" doc:id="0f9e25b7-72b5-47c9-9e28-03078cc4ba67">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="442f8e66-f2e8-458b-81e2-b5ec1fa2b8d1" message="#[payload]" />
+		<ee:transform doc:name="Transform Message" doc:id="67f62915-51c9-4b34-806e-e4c1743fa020">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/java
+---
+{
+	items: payload map ( item , indexOfPayload01 ) -> {
+		idcostumers: item.idcostumers,
+		iditems: item.iditems
+	}
+}
+	
+	
+]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="f07be317-a0f3-4c2e-b0f3-44a212696ac6" message="#[payload]" />
+		<foreach doc:name="For Each" doc:id="70245367-4625-49ab-b7bb-c2785a551edb" collection="#[payload.items]">
+			<db:insert doc:name="Insert" doc:id="dec003d7-8a30-4408-8682-c2cf59e55cdc" config-ref="Database_mysql">
+				<db:sql>insert into customeritem(id_costumers,id_items)
+values(:idcos,:iditem)</db:sql>
+				<db:input-parameters><![CDATA[#[{
+	idcos: payload.idcostumers,
+	iditem: payload.iditems
+	
+}]]]></db:input-parameters>
+			</db:insert>
+		</foreach>
+		<db:select doc:name="Select" doc:id="2905c2ec-21c1-4a7e-bb87-c1bfc5c5479e" config-ref="Database_mysql">
+			<db:sql>select idcustomerItem,customerName, salesOrderNumber, itemNumber, itemDescription from items join customeritem on items.iditems = customeritem.id_items join costumers on customeritem.id_costumers = costumers.idcostumers</db:sql>
+		</db:select>
+		<ee:transform doc:name="Transform Message" doc:id="1187dc16-0421-4813-9dd7-bccf5e788990">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<flow-ref doc:name="transformacionCsv" doc:id="51b6b48c-fcdb-4fc0-860b-98c29f52eb02" name="transformacionCsv"/>
+	</flow>
+	<flow name="transformacionCsv" doc:id="04b8f4f8-9f67-4074-b7b6-68f11092d678" >
+		<logger level="INFO" doc:name="Logger" doc:id="500ecb48-7e59-440b-9fda-4120c3c9880d" message="#[payload]"/>
+		<ee:transform doc:name="Transform Message" doc:id="8524643e-fb53-4d33-868b-24db9407eac3" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/csv
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="a3a6e9e6-a8a5-4214-99af-a01633d237b3" message="#[payload]"/>
+		<file:write doc:name="Write" doc:id="db565a71-704b-4fe3-bac1-e00ffcc15581" config-ref="File_Config" path="C:\Users\Singular\Desktop\mule soft\resultados_shipping\input\sales_order.csv"/>
+		<flow-ref doc:name="email" doc:id="2b0825e1-1e9a-44b4-94c5-8bcf35466723" name="email"/>
+	</flow>
+	<flow name="email" doc:id="15293990-1de5-4612-aad2-2d3f9f9f3587" >
+		<logger level="INFO" doc:name="Logger" doc:id="c0b9d8fd-6111-498a-9e88-23f3f004fdd0" message="#[payload]"/>
+		<email:send doc:name="Send" doc:id="2a0ddc0f-2421-4c80-93ec-a24886949ee1" config-ref="Email_SMTP" fromAddress="lyndis_prueba@FE.com" subject="[prueba]" attachmentsContentTransferEncoding="UTF-8">
+			<email:to-addresses >
+				<email:to-address value="localhost@localhost.com" />
+			</email:to-addresses>
+			<email:bcc-addresses />
+			<email:body contentTransferEncoding="Binary" >
+			</email:body>
+		</email:send>
+	</flow>
+	
+</mule>

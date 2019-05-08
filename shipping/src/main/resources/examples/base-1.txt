@@ -1,0 +1,8 @@
+{
+	"items": [
+    {
+    "idcostumers": 7,
+	"iditems": 11
+    }
+  ]
+ }
