@@ -138,6 +138,7 @@ payload]]></ee:set-payload>
             </ee:message>
         </ee:transform>
 		<flow-ref doc:name="shipping" doc:id="200ef50b-cd38-430c-a9df-c155630d333f" name="shipping"/>
+		<set-variable value="#[payload]" doc:name="Set Variable" doc:id="ffe4777a-aa18-42fc-81e6-f858a0cb6ced" variableName="payloadOriginal" />
 		<os:store doc:name="Store" doc:id="69fe32c9-4633-423f-9680-12b1746b9370" key="COMPLETE"/>
 		<flow-ref doc:name="Base de datos" doc:id="4b26b850-b4eb-4e82-97f1-5b6d4e206977" name="baseDatos" />
     </flow>
@@ -320,7 +321,7 @@ payload]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
 		<logger level="INFO" doc:name="Logger" doc:id="a3a6e9e6-a8a5-4214-99af-a01633d237b3" message="#[payload]"/>
-		<file:write doc:name="Write" doc:id="db565a71-704b-4fe3-bac1-e00ffcc15581" path="C:\Users\Singular\Desktop\mule soft\resultados_shipping\input\sales_order.csv"/>
+		<file:write doc:name="Write" doc:id="db565a71-704b-4fe3-bac1-e00ffcc15581" path="C:\Users\Singular\Desktop\mule soft\resultados_shipping\input\sales_order.csv" config-ref="File_Config"/>
 		<flow-ref doc:name="email" doc:id="2b0825e1-1e9a-44b4-94c5-8bcf35466723" name="email"/>
 	</flow>
 	<flow name="email" doc:id="15293990-1de5-4612-aad2-2d3f9f9f3587" >
