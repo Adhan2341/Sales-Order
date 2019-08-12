@@ -1,0 +1,35 @@
+{
+  "configs": [
+    "global.xml",
+    "shipping.xml",
+    "shpping.xml"
+  ],
+  "secureProperties": [],
+  "redeploymentEnabled": true,
+  "name": "com.mycompany:shpping:1.0.0-SNAPSHOT",
+  "minMuleVersion": "4.1.5",
+  "requiredProduct": "MULE_EE",
+  "classLoaderModelLoaderDescriptor": {
+    "id": "mule",
+    "attributes": {
+      "exportedPackages": [],
+      "exportedResources": [
+        "api/shipping.raml",
+        "application-types.xml",
+        "config.yaml",
+        "examples/base-1.txt",
+        "examples/base.txt",
+        "examples/csv.txt",
+        "examples/jsontra.txt",
+        "global.xml",
+        "log4j2.xml",
+        "shipping.xml",
+        "shpping.xml"
+      ]
+    }
+  },
+  "bundleDescriptorLoader": {
+    "id": "mule",
+    "attributes": {}
+  }
+}

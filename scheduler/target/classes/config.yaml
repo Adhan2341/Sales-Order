@@ -1,0 +1,12 @@
+http:
+  port: "8081" 
+  
+db:
+  port: "3306"
+  user: "root"
+  pass: "lyndis11"
+  host: "localhost"
+  database: "sales_order"
+
+file: 
+  dir: "/Users/Singular/Desktop/mule soft/resultados_shipping"  

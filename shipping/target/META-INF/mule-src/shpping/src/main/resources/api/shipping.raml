@@ -1,0 +1,46 @@
+#%RAML 1.0
+version: v1
+baseUri: https://anypoint.mulesoft.com/mocking/api/v1/links/1f4bb791-7189-455d-840f-2b5ab2644490/ # 
+title: shipping
+
+types:
+  OrderType:
+    type: object
+    properties:
+      customerId:
+        required: true
+        type: number
+      customerName:
+        required: true
+        type: string
+      salesOrderNumber:
+        required: true
+        type: number
+      items:
+        required: true
+        minItems: 1
+        type: array
+        items:
+          required: true
+          type: LineItemType
+  LineItemType:
+    type: object
+    properties:
+      quantity:
+        required: true
+        type: number
+      price:
+        required: true
+        type: number
+/order:
+  post:
+    responses:
+      '201':
+        description: se creo el scheduler
+      '400':
+        description: request invalido
+      '500':
+        description: error inesperado
+    body:
+      application/json:
+        type: OrderType

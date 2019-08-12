@@ -1,0 +1,11 @@
+{
+    "salesOrderNumber": "21331",
+    "type": "item",
+    "price": 23,
+    "idcostumers": 7,
+    "quantity": 3,
+    "customerName": "Lyndis",
+    "itemNumber": 15234,
+    "iditems": 11,
+    "itemDescription": "zolar"
+  }
