@@ -1,0 +1,40 @@
+        Mon, 06 May 2019 14:27:51 -0500 (CDT)
+Date: Mon, 6 May 2019 14:27:51 -0500 (CDT)
+From: lyndis_prueba@FE.com
+To: localhost@localhost.com
+Message-ID: <908736530.0.1557170871344@LAPTOP-SJ96P2E1>
+Subject: [prueba]
+MIME-Version: 1.0
+Content-Type: application/csv; charset=windows-1252
+Content-Transfer-Encoding: Binary
+Content-Disposition: inline
+
+salesOrderNumber,idcustomerItem,customerName,itemNumber,itemDescription
+21331,481,Lyndis,15234,zolar
+21331,482,Lyndis,234,water
+21331,483,Lyndis,15234,zolar
+21331,485,Lyndis,234,water
+21331,487,Lyndis,15234,zolar
+21331,489,Lyndis,234,water
+21331,491,Lyndis,15234,zolar
+21331,494,Lyndis,234,water
+21331,497,Lyndis,15234,zolar
+21331,500,Lyndis,234,water
+21331,503,Lyndis,15234,zolar
+21331,506,Lyndis,234,water
+21331,484,Lyndis,15234,zolar
+21331,486,Lyndis,234,water
+21331,488,Lyndis,15234,zolar
+21331,490,Lyndis,234,water
+21331,492,Lyndis,15234,zolar
+21331,495,Lyndis,234,water
+21331,498,Lyndis,15234,zolar
+21331,501,Lyndis,234,water
+21331,504,Lyndis,15234,zolar
+21331,507,Lyndis,234,water
+21331,493,Lyndis,15234,zolar
+21331,496,Lyndis,234,water
+21331,499,Lyndis,15234,zolar
+21331,502,Lyndis,234,water
+21331,505,Lyndis,15234,zolar
+21331,508,Lyndis,234,water

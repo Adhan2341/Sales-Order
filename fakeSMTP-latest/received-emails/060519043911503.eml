@@ -1,0 +1,72 @@
+        Mon, 06 May 2019 16:39:11 -0500 (CDT)
+Date: Mon, 6 May 2019 16:39:11 -0500 (CDT)
+From: lyndis_prueba@FE.com
+To: localhost@localhost.com
+Message-ID: <191058132.0.1557178751445@LAPTOP-SJ96P2E1>
+Subject: [prueba]
+MIME-Version: 1.0
+Content-Type: application/csv; charset=windows-1252
+Content-Transfer-Encoding: Binary
+Content-Disposition: inline
+
+salesOrderNumber,idcustomerItem,customerName,itemNumber,itemDescription
+21331,481,Lyndis,15234,zolar
+21331,482,Lyndis,234,water
+21331,483,Lyndis,15234,zolar
+21331,485,Lyndis,234,water
+21331,487,Lyndis,15234,zolar
+21331,489,Lyndis,234,water
+21331,491,Lyndis,15234,zolar
+21331,494,Lyndis,234,water
+21331,497,Lyndis,15234,zolar
+21331,500,Lyndis,234,water
+21331,503,Lyndis,15234,zolar
+21331,506,Lyndis,234,water
+21331,509,Lyndis,15234,zolar
+21331,513,Lyndis,234,water
+21331,517,Lyndis,15234,zolar
+21331,521,Lyndis,234,water
+21331,525,Lyndis,15234,zolar
+21331,529,Lyndis,234,water
+21331,533,Lyndis,15234,zolar
+21331,537,Lyndis,234,water
+21331,484,Lyndis,15234,zolar
+21331,486,Lyndis,234,water
+21331,488,Lyndis,15234,zolar
+21331,490,Lyndis,234,water
+21331,492,Lyndis,15234,zolar
+21331,495,Lyndis,234,water
+21331,498,Lyndis,15234,zolar
+21331,501,Lyndis,234,water
+21331,504,Lyndis,15234,zolar
+21331,507,Lyndis,234,water
+21331,510,Lyndis,15234,zolar
+21331,514,Lyndis,234,water
+21331,518,Lyndis,15234,zolar
+21331,522,Lyndis,234,water
+21331,526,Lyndis,15234,zolar
+21331,530,Lyndis,234,water
+21331,534,Lyndis,15234,zolar
+21331,538,Lyndis,234,water
+21331,493,Lyndis,15234,zolar
+21331,496,Lyndis,234,water
+21331,499,Lyndis,15234,zolar
+21331,502,Lyndis,234,water
+21331,505,Lyndis,15234,zolar
+21331,508,Lyndis,234,water
+21331,511,Lyndis,15234,zolar
+21331,515,Lyndis,234,water
+21331,519,Lyndis,15234,zolar
+21331,523,Lyndis,234,water
+21331,527,Lyndis,15234,zolar
+21331,531,Lyndis,234,water
+21331,535,Lyndis,15234,zolar
+21331,539,Lyndis,234,water
+21331,512,Lyndis,15234,zolar
+21331,516,Lyndis,234,water
+21331,520,Lyndis,15234,zolar
+21331,524,Lyndis,234,water
+21331,528,Lyndis,15234,zolar
+21331,532,Lyndis,234,water
+21331,536,Lyndis,15234,zolar
+21331,540,Lyndis,234,water
